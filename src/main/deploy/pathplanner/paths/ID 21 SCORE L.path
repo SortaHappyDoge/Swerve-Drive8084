@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.085132536207379,
-        "y": 3.8510596046679253
+        "x": 6.059416428518689,
+        "y": 3.8628731183078764
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.717953966246035,
-        "y": 3.850867513143281
+        "x": 5.692237858557345,
+        "y": 3.862681026783232
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.829397710221352,
-        "y": 3.8564246709473524
+        "x": 5.774867978739206,
+        "y": 3.8625503716846366
       },
       "prevControl": {
-        "x": 6.450932387435836,
-        "y": 3.86149089959483
+        "x": 6.053790983606557,
+        "y": 3.8511782786885242
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Journey Started",
+      "name": "autonReadyElevator",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
@@ -65,7 +65,7 @@
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0.6,
+    "velocity": 1.2,
     "rotation": 180.0
   },
   "useDefaultConstraints": true

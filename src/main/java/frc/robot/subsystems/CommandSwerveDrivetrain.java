@@ -277,7 +277,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             }
             if(!doRejectUpdate)
             {
-                if(mt1.avgTagDist < 1.2){ // TEST SAFEGUARD
+                if(mt1.avgTagDist < 1.2 && false){
                     this.addVisionMeasurement(mt1.pose, mt1.timestampSeconds,
                     VecBuilder.fill(0.5,0.5,9999999)
                     );

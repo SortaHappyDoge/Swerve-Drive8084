@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.servohub.ServoHub.ResetMode;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -12,26 +13,25 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
 public class IntakeSubsystem extends SubsystemBase {
-    private final SparkMax motor;
+    private final TalonFX motor;
 
             
         
         
             public IntakeSubsystem() {
                 // 1. Motor tanımla
-                motor = new SparkMax(20, MotorType.kBrushless);
-    
+                //motor = new SparkMax(20, MotorType.kBrushless);
+                motor = new TalonFX(20);  
     
             // 2. Config nesnesi oluştur
-            SparkMaxConfig config = new SparkMaxConfig();
+            //SparkMaxConfig config = new SparkMaxConfig();
     
             // 3. PID Encoder yapılandırması
             
     
             // İstersen motoru hemen sür
-            motor.set(0.0);  // %50 hızla ileri döner
+            motor.set(0);
         }
 
         

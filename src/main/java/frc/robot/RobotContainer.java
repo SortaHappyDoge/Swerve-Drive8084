@@ -7,8 +7,11 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*; 
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.fasterxml.jackson.databind.deser.DataFormatReaders.Match;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
+import com.pathplanner.lib.events.EventTrigger;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -108,9 +111,13 @@ public class RobotContainer {
             ID21SCORE_L = PathPlannerPath.fromPathFile("ID 21 SCORE L");
             ID22SCORE_R = PathPlannerPath.fromPathFile("ID 22 SCORE R");
             ID22SCORE_L = PathPlannerPath.fromPathFile("ID 22 SCORE L");
+
         } catch (Exception e) {
             // TODO: handle exception
         }
+        new EventTrigger("autonReadyElevator").onTrue(raiseElevatorAuton());
+
+
         configureBindings();
         SmartDashboard.putData(drivetrain.m_field);
         /*PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
@@ -198,6 +205,11 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> shooterSubsystem.setMotor(0.2)))
         .onFalse(new InstantCommand(() -> shooterSubsystem.setMotor(0)));
         new JoystickButton(auton_joystick, 1).onTrue(loadCoral());
+
+        new JoystickButton(auton_joystick, SAG_BUTON)
+        .onTrue(pathfindToReef(12, true, true).andThen(loadCoral()));
+        new JoystickButton(auton_joystick, SOL_BUTON)
+        .onTrue(pathfindToReef(13, true, true).andThen(loadCoral()));
     }
     
     
@@ -325,23 +337,22 @@ public class RobotContainer {
         return null;
     }
 
-
+    public Command raiseElevatorAuton(){
+        if(!DriverStation.isAutonomous()){
+            return new WaitCommand(0);
+        }
+        return new WaitCommand(0)
+        .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(3)));
+    }
     public Command scoreCoral(int level){
-        /*FunctionalCommand cmd = new FunctionalCommand(
-            () -> {elevatorSubsystem.elevateToReef(level);},
-            () -> {},
-            interrupted -> {},
-            () -> {return elevatorSubsystem.elevatorPosition > kReefHeights[level] - 0.03;},
-            elevatorSubsystem
-        );*/
         FunctionalCommand cmd = new FunctionalCommand(
             () -> {elevatorSubsystem.elevateToReef(level);}, 
             () -> {}, 
             interrupted -> {}, 
-            () -> {return elevatorSubsystem.getElevatorPosition() > elevatorSubsystem.kReefHeights[level] - 0.03;}, 
+            () -> {return elevatorSubsystem.getElevatorPosition() > elevatorSubsystem.kReefHeights[level] - 0.06;}, 
             elevatorSubsystem);
-        Command cmd2 = new InstantCommand(() -> shooterSubsystem.setMotor(0.4));
-        Command cmd3 = new WaitCommand(0.4);
+        Command cmd2 = new InstantCommand(() -> shooterSubsystem.setMotor(0.2));
+        Command cmd3 = new WaitCommand(0.3);
         Command cmd4 = new InstantCommand(() -> shooterSubsystem.setMotor(0));
         Command cmd5 = new InstantCommand(() -> elevatorSubsystem.elevateToReef(0));
         return cmd.andThen(cmd2).andThen(cmd3).andThen(cmd4).andThen(cmd5);
@@ -349,7 +360,7 @@ public class RobotContainer {
     public Command loadCoral(){
         FunctionalCommand cmd = new FunctionalCommand(
             () -> {
-                shooterSubsystem.setMotor(0.1);
+                shooterSubsystem.setMotor(0.13);
                 intakeSubsystem.setMotor(-0.5);
             },
             () -> {}, 
@@ -368,6 +379,7 @@ public class RobotContainer {
         // Blue Alliance Middle Starting Pose Auton
         if(pose_chooser.getSelected() == kStartingPoses[1]){
             return new WaitCommand(0)
+            .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(1)))
             .andThen(pathfindToReef(21, false, true))
             .andThen(scoreCoral(3))
             ;
@@ -376,7 +388,7 @@ public class RobotContainer {
         // Blue Alliance Left Starting Pose Auton
         else if(pose_chooser.getSelected() == kStartingPoses[0]){
             return new WaitCommand(0)
-                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(2)))
+                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(1)))
                 .andThen(pathfindToReef(20, true, true))
                 .andThen(scoreCoral(3))
                 .andThen(pathfindToReef(13, true, true))
@@ -395,14 +407,17 @@ public class RobotContainer {
         // Blue Alliance Right Starting Pose Auton
         else if(pose_chooser.getSelected() == kStartingPoses[2]){
             return new WaitCommand(0)
+                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(1)))
                 .andThen(pathfindToReef(22, false, true))
                 .andThen(scoreCoral(3))
                 .andThen(pathfindToReef(12, true, true))
                 .andThen(loadCoral())
+                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(2)))
                 .andThen(pathfindToReef(17, true, true))
                 .andThen(scoreCoral(3))
                 .andThen(pathfindToReef(12, true, true))
                 .andThen(loadCoral())
+                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(2)))
                 .andThen(pathfindToReef(17, false, true))
                 .andThen(scoreCoral(3))
             ;
@@ -411,14 +426,17 @@ public class RobotContainer {
         // Red Alliance Right Starting Pose Auton
         else if(pose_chooser.getSelected() == kStartingPoses[3]){
             return new WaitCommand(0)
+                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(1)))
                 .andThen(pathfindToReef(20, true, true))
                 .andThen(scoreCoral(3))
                 .andThen(pathfindToReef(13, true, true))
                 .andThen(loadCoral())
+                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(2)))
                 .andThen(pathfindToReef(19, true, true))
                 .andThen(scoreCoral(3))
                 .andThen(pathfindToReef(13, true, true))
                 .andThen(loadCoral())
+                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(2)))
                 .andThen(pathfindToReef(19, false, true))
                 .andThen(scoreCoral(3))
             ;
@@ -427,6 +445,7 @@ public class RobotContainer {
         // Red Alliance Right Starting Pose Auton
         else if(pose_chooser.getSelected() == kStartingPoses[4]){
             return new WaitCommand(0)
+            .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(1)))
             .andThen(pathfindToReef(21, false, true))
             .andThen(scoreCoral(3))
             ;
@@ -435,14 +454,17 @@ public class RobotContainer {
         // Red Alliance Right Starting Pose Auton
         else{
             return new WaitCommand(0)
+                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(1)))
                 .andThen(pathfindToReef(22, false, true))
                 .andThen(scoreCoral(3))
                 .andThen(pathfindToReef(12, true, true))
                 .andThen(loadCoral())
+                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(2)))
                 .andThen(pathfindToReef(17, true, true))
                 .andThen(scoreCoral(3))
                 .andThen(pathfindToReef(12, true, true))
                 .andThen(loadCoral())
+                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(2)))
                 .andThen(pathfindToReef(17, false, true))
                 .andThen(scoreCoral(3))
             ;

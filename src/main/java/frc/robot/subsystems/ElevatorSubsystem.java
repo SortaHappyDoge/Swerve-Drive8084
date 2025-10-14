@@ -44,7 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public double elevatorPosition; // height in meters
   public double desiredElevatorPosition = 0;
 
-  public double[] kReefHeights = new double[]{0, 0.34, 0.73, 1.42, 0.15};
+  public double[] kReefHeights = new double[]{0, 0.34, 0.755, 1.43, 0.15};
 
 
   
