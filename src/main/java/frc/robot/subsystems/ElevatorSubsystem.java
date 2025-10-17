@@ -33,7 +33,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   SparkMax m_elevatorSparkMax1;
 
   SparkMaxConfig kElevatorSparkMaxConfig;
-  PIDController m_elevatorPIDController = new PIDController(5, 0, 0.5);
+  PIDController m_elevatorPIDController = new PIDController(6, 0, 0.5);
   PIDController m_elevatorPIDControllerDown = new PIDController(2.5, 0, 0.1);
   //SparkAbsoluteEncoder m_elevatorAbsoluteEncoder;
   private double kElevatorMotorSpeedMultiplier = 1;
@@ -44,7 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public double elevatorPosition; // height in meters
   public double desiredElevatorPosition = 0;
 
-  public double[] kReefHeights = new double[]{0, 0.34, 0.755, 1.43, 0.15};
+  public double[] kReefHeights = new double[]{0, 0.34, 0.755, 1.43, 0.15, 0.5};
 
 
   
@@ -62,7 +62,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     kElevatorSparkMaxConfig.encoder
         .positionConversionFactor(2*Math.PI)
         .velocityConversionFactor(2*Math.PI/60);
-    kElevatorSparkMaxConfig.openLoopRampRate(0.3); // the time (in seconds) for the motor to ramp up from 0% speed to 100%
+    kElevatorSparkMaxConfig.openLoopRampRate(0.12); // the time (in seconds) for the motor to ramp up from 0% speed to 100%
 
     m_elevatorSparkMax0.configure(kElevatorSparkMaxConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.5636294618424156,
-        "y": 1.0196779904997106
+        "x": 1.5138821386087198,
+        "y": 0.9705961173204969
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2990473156526998,
-        "y": 0.7502582941451952
+        "x": 1.2273813836710994,
+        "y": 0.5946797897820656
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.3928567434392423,
-        "y": 0.7914060011043443
+        "x": 1.385607516878714,
+        "y": 0.7939159779565272
       },
       "prevControl": {
-        "x": 1.6221528448425784,
-        "y": 0.8910217522746837
+        "x": 1.7198919900275926,
+        "y": 1.2188946415719906
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Journey Started",
+      "name": "Intake Coral",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": null
@@ -48,7 +48,7 @@
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
+    "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
@@ -60,7 +60,7 @@
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 2.0,
+    "velocity": 1.2,
     "rotation": 54.0
   },
   "useDefaultConstraints": true

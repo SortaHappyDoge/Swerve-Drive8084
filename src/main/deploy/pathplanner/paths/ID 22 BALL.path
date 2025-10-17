@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.57212775282199,
-        "y": 2.7526815417482884
+        "x": 5.260937014964929,
+        "y": 2.6705416817075194
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7181401024614913,
-        "y": 2.9992801766950015
+        "x": 5.097528676867352,
+        "y": 2.8762898487335047
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.7138400386149395,
-        "y": 3.00128831375477
+        "x": 5.115775066815673,
+        "y": 2.921373911905553
       },
       "prevControl": {
-        "x": 3.57212775282199,
-        "y": 2.754303901188728
+        "x": 5.276739709291713,
+        "y": 2.7300877810111244
       },
       "nextControl": null,
       "isLocked": false,
@@ -37,9 +37,22 @@
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "named",
+        "type": "parallel",
         "data": {
-          "name": "Ready"
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Ball Level High"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Load Ball"
+              }
+            }
+          ]
         }
       }
     },
@@ -59,14 +72,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 59.99999999999999
+    "velocity": 0.0,
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Blue Alliance",
   "idealStartingState": {
-    "velocity": 1.1,
-    "rotation": 59.99999999999999
+    "velocity": 0.0,
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

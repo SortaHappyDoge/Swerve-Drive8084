@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.415366229592064,
-        "y": 2.7453619042263178
+        "x": 5.404718875423907,
+        "y": 2.754541633133707
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.32217647791097,
-        "y": 3.0036368810311465
+        "x": 5.266070984804348,
+        "y": 3.012099671271983
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.268958433679833,
-        "y": 2.9907387776109364
+        "x": 5.264200885601586,
+        "y": 3.0070011748369647
       },
       "prevControl": {
-        "x": 5.477046703344919,
-        "y": 2.5066788714377983
+        "x": 5.403929591361726,
+        "y": 2.7567615565178847
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,13 +33,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "autonReadyElevator",
+      "name": "Journey Started",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Auton Ready Elevator"
+          "name": "Ready"
         }
       }
     },
@@ -53,7 +53,7 @@
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
+    "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false

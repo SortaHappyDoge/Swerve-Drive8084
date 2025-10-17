@@ -95,6 +95,9 @@ public class RobotContainer {
 
 
     public RobotContainer() {
+        NamedCommands.registerCommand("Ready", raiseElevatorAuton());
+        //NamedCommands.registerCommand("Load Coral", new InstantCommand(() -> {}));
+        //new EventTrigger("Journey Started").onTrue(raiseElevatorAuton());
         drivetrain.configureAutoBuilder();
         try {
             ID12SOURCE = PathPlannerPath.fromPathFile("ID 12 SOURCE");
@@ -115,7 +118,6 @@ public class RobotContainer {
         } catch (Exception e) {
             // TODO: handle exception
         }
-        new EventTrigger("autonReadyElevator").onTrue(raiseElevatorAuton());
 
 
         configureBindings();
@@ -123,21 +125,21 @@ public class RobotContainer {
         /*PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
             // Do whatever you want with the pose here
             m_field.setRobotPose(pose);
-        });*/
+            });*/
 
-        // Logging callback for target robot pose
-        PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+            // Logging callback for target robot pose
+            PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
             // Do whatever you want with the pose here
             drivetrain.m_field.getObject("target pose").setPose(pose);
         });
-
+        
         // Logging callback for the active path, this is sent as a list of poses
         PathPlannerLogging.setLogActivePathCallback((poses) -> {
             // Do whatever you want with the poses here
             drivetrain.m_field.getObject("path").setPoses(poses);
         });
 
-
+        
         pose_chooser.setDefaultOption("Blue Middle", kStartingPoses[1]);
         pose_chooser.addOption("Blue Left", kStartingPoses[0]);
         pose_chooser.addOption("Blue Middle", kStartingPoses[1]);
@@ -192,7 +194,7 @@ public class RobotContainer {
         joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
-        joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        //joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -206,10 +208,19 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> shooterSubsystem.setMotor(0)));
         new JoystickButton(auton_joystick, 1).onTrue(loadCoral());
 
-        new JoystickButton(auton_joystick, SAG_BUTON)
+        /*new JoystickButton(auton_joystick, 6)
         .onTrue(pathfindToReef(12, true, true).andThen(loadCoral()));
-        new JoystickButton(auton_joystick, SOL_BUTON)
-        .onTrue(pathfindToReef(13, true, true).andThen(loadCoral()));
+        new JoystickButton(auton_joystick, 5)
+        .onTrue(pathfindToReef(13, true, true).andThen(loadCoral()));*/
+        
+        joystick.button(6).onTrue(pathfindToReef(12, true, true).andThen(loadCoral()));
+        joystick.button(5).onTrue(pathfindToReef(13, true, true).andThen(loadCoral()));
+
+        joystick.a().onTrue(new InstantCommand(() -> shooterSubsystem.setDesiredStickPos(shooterSubsystem.ballStickPoses[1])))
+        .onFalse(new InstantCommand(() -> shooterSubsystem.setDesiredStickPos(shooterSubsystem.ballStickPoses[0])));
+        joystick.b().onTrue(new InstantCommand(() -> shooterSubsystem.setDesiredStickPos(shooterSubsystem.ballStickPoses[2])))
+        .onFalse(new InstantCommand(() -> shooterSubsystem.setDesiredStickPos(shooterSubsystem.ballStickPoses[0])));
+
     }
     
     
@@ -338,11 +349,17 @@ public class RobotContainer {
     }
 
     public Command raiseElevatorAuton(){
+        System.out.println("Try auton raise");
         if(!DriverStation.isAutonomous()){
-            return new WaitCommand(0);
+            return new InstantCommand(() -> {});
         }
-        return new WaitCommand(0)
-        .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(3)));
+        FunctionalCommand cmd = new FunctionalCommand(
+            () -> {elevatorSubsystem.elevateToReef(3);}, 
+            () -> {}, 
+            interrupted -> {}, 
+            () -> {return true;}, 
+            elevatorSubsystem);
+        return cmd;
     }
     public Command scoreCoral(int level){
         FunctionalCommand cmd = new FunctionalCommand(
@@ -361,7 +378,7 @@ public class RobotContainer {
         FunctionalCommand cmd = new FunctionalCommand(
             () -> {
                 shooterSubsystem.setMotor(0.13);
-                intakeSubsystem.setMotor(-0.5);
+                intakeSubsystem.setMotor(-0.3);
             },
             () -> {}, 
             interrupted -> {
@@ -379,7 +396,7 @@ public class RobotContainer {
         // Blue Alliance Middle Starting Pose Auton
         if(pose_chooser.getSelected() == kStartingPoses[1]){
             return new WaitCommand(0)
-            .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(1)))
+            .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(5)))
             .andThen(pathfindToReef(21, false, true))
             .andThen(scoreCoral(3))
             ;
@@ -388,7 +405,7 @@ public class RobotContainer {
         // Blue Alliance Left Starting Pose Auton
         else if(pose_chooser.getSelected() == kStartingPoses[0]){
             return new WaitCommand(0)
-                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(1)))
+                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(5)))
                 .andThen(pathfindToReef(20, true, true))
                 .andThen(scoreCoral(3))
                 .andThen(pathfindToReef(13, true, true))
@@ -407,7 +424,7 @@ public class RobotContainer {
         // Blue Alliance Right Starting Pose Auton
         else if(pose_chooser.getSelected() == kStartingPoses[2]){
             return new WaitCommand(0)
-                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(1)))
+                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(5)))
                 .andThen(pathfindToReef(22, false, true))
                 .andThen(scoreCoral(3))
                 .andThen(pathfindToReef(12, true, true))
@@ -426,7 +443,7 @@ public class RobotContainer {
         // Red Alliance Right Starting Pose Auton
         else if(pose_chooser.getSelected() == kStartingPoses[3]){
             return new WaitCommand(0)
-                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(1)))
+                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(5)))
                 .andThen(pathfindToReef(20, true, true))
                 .andThen(scoreCoral(3))
                 .andThen(pathfindToReef(13, true, true))
@@ -445,7 +462,7 @@ public class RobotContainer {
         // Red Alliance Right Starting Pose Auton
         else if(pose_chooser.getSelected() == kStartingPoses[4]){
             return new WaitCommand(0)
-            .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(1)))
+            .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(5)))
             .andThen(pathfindToReef(21, false, true))
             .andThen(scoreCoral(3))
             ;
@@ -454,7 +471,7 @@ public class RobotContainer {
         // Red Alliance Right Starting Pose Auton
         else{
             return new WaitCommand(0)
-                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(1)))
+                .andThen(new InstantCommand(() -> elevatorSubsystem.elevateToReef(5)))
                 .andThen(pathfindToReef(22, false, true))
                 .andThen(scoreCoral(3))
                 .andThen(pathfindToReef(12, true, true))

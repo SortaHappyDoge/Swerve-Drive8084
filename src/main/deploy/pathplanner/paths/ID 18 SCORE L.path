@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.909649742858927,
-        "y": 4.181206497831648
+        "x": 2.9298450088178254,
+        "y": 4.187929054290096
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.222227437712733,
-        "y": 4.166698559110084
+        "x": 3.2170026297755108,
+        "y": 4.1911737731709735
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.201674442137929,
-        "y": 4.187695935593405
+        "x": 3.2125757378784345,
+        "y": 4.188119978563552
       },
       "prevControl": {
-        "x": 2.6181244643084285,
-        "y": 4.202842545068257
+        "x": 2.929741992149062,
+        "y": 4.186364279159285
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
       "command": {
         "type": "named",
         "data": {
-          "name": "Ready Elevator"
+          "name": "Ready"
         }
       }
     },
@@ -53,7 +53,7 @@
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
+    "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false

@@ -267,7 +267,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if(mt2 != null){
             boolean doRejectUpdate = false; 
             // if our angular velocity is greater than 360 degrees per second, ignore vision updates
-            if(Math.abs(this.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 360)
+            if(Math.abs(this.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720)
             {
                 doRejectUpdate = true;
             }
@@ -277,8 +277,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             }
             if(!doRejectUpdate)
             {
-                if(mt1.avgTagDist < 1.2 && false){
-                    this.addVisionMeasurement(mt1.pose, mt1.timestampSeconds,
+                if(mt1.avgTagDist < 1.2 && Math.abs(this.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 100){
+                    this.addVisionMeasurement(
+                        new Pose2d(mt1.pose.getTranslation(), Rotation2d.fromDegrees(this.getPigeon2().getYaw().getValueAsDouble())),
+                        mt1.timestampSeconds,
                     VecBuilder.fill(0.5,0.5,9999999)
                     );
                     //this.getPigeon2().setYaw(mt1.pose.getRotation().getDegrees());
@@ -361,6 +363,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public void configureAutoBuilder(){
+        if(AutoBuilder.isConfigured()){return;}
         AutoBuilder.configure(
             () -> this.getState().Pose,
             this::resetPose,

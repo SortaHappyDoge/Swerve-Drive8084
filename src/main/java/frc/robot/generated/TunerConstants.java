@@ -170,7 +170,7 @@ public class TunerConstants {
     private static final Distance kBackRightXPos = Inches.of(-12);
     private static final Distance kBackRightYPos = Inches.of(-12);
 
-    public static PathConstraints pathfindingConstraints = new PathConstraints(3.5, 2.85, 2*Math.PI, 2*Math.PI);
+    public static PathConstraints pathfindingConstraints = new PathConstraints(3.5, 3, 2*Math.PI, 2*Math.PI);
 
     public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontLeft =
         ConstantCreator.createModuleConstants(
